@@ -21,6 +21,7 @@ from datasets import ImageFolder
 from transformation import Resize, DEFAULT_TRANSFORMS
 
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors_plt
 import matplotlib.patches as patches
 from matplotlib.ticker import NullLocator
 
@@ -203,7 +204,7 @@ def _draw_and_save_output_image(image_path, detections, img_size, output_path, c
 
         color = bbox_colors[int(np.where(unique_labels == int(cls_pred))[0])]
         # Create a Rectangle patch
-        bbox = patches.Rectangle((x1, y1), box_w, box_h, linewidth=2, edgecolor=color, facecolor="none")
+        bbox = patches.Rectangle((x1, y1), box_w, box_h, linewidth=1, edgecolor=[0, 1, 0, 1], facecolor="none")
 
         # Add the bbox to the plot
         ax.add_patch(bbox)
@@ -211,18 +212,19 @@ def _draw_and_save_output_image(image_path, detections, img_size, output_path, c
         plt.text(
             x1,
             y1,
-            s=f"{classes[int(cls_pred)]}: {conf:.2f}",
+            s=f"{conf:.2f}",
             color="white",
-            verticalalignment="top",
-            bbox={"color": color, "pad": 0})
+            verticalalignment="bottom",
+            bbox={"color": color, "pad": 0},
+            fontsize='xx-small')
 
     # Save generated image with detections
     plt.axis("off")
     plt.gca().xaxis.set_major_locator(NullLocator())
     plt.gca().yaxis.set_major_locator(NullLocator())
     filename = os.path.basename(image_path).split(".")[0]
-    output_path = os.path.join(output_path, f"{filename}.png")
-    plt.savefig(output_path, bbox_inches="tight", pad_inches=0.0)
+    output_path = os.path.join(output_path, f"{filename}.jpg")
+    plt.savefig(output_path, bbox_inches="tight", pad_inches=0.0, dpi=300)
     plt.close()
 
 
@@ -255,15 +257,15 @@ def _create_data_loader(img_path, batch_size, img_size, n_cpu):
 def run():
     parser = argparse.ArgumentParser(description="Detect objects on images.")
     parser.add_argument("-m", "--model", type=str, default="config/yolov3.cfg", help="Path to model definition file (.cfg)")
-    parser.add_argument("-w", "--weights", type=str, default="checkpoints/yolov3_ckpt_75.pth", help="Path to weights or checkpoint file (.weights or .pth)")
+    parser.add_argument("-w", "--weights", type=str, default="checkpoints/yolov3_ckpt_part4_250.pth", help="Path to weights or checkpoint file (.weights or .pth)")
     parser.add_argument("-i", "--images", type=str, default="data/samples", help="Path to directory with images to inference")
     parser.add_argument("-c", "--classes", type=str, default="data/mot.names", help="Path to classes label file (.names)")
     parser.add_argument("-o", "--output", type=str, default="output", help="Path to output directory")
     parser.add_argument("-b", "--batch_size", type=int, default=1, help="Size of each image batch")
     parser.add_argument("--img_size", type=int, default=416, help="Size of each image dimension for yolo")
     parser.add_argument("--n_cpu", type=int, default=2, help="Number of cpu threads to use during batch generation")
-    parser.add_argument("--conf_thres", type=float, default=0.3, help="Object confidence threshold")
-    parser.add_argument("--nms_thres", type=float, default=0.4, help="IOU threshold for non-maximum suppression")
+    parser.add_argument("--conf_thres", type=float, default=0.55, help="Object confidence threshold")
+    parser.add_argument("--nms_thres", type=float, default=0.3, help="IOU threshold for non-maximum suppression")
     args = parser.parse_args()
 
     # Extract class names from file

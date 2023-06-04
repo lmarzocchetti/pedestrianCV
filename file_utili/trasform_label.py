@@ -82,12 +82,12 @@ def readVideo(n_video: int) -> list[FrameBoxes]:
     return retVal
 
 def main():
-    for video_idx in range(469):
+    for video_idx in range(470, 476):
         video_label: List[FrameBoxes] = readVideo(video_idx)
 
         for idx, frame in enumerate(video_label):
             frame.scale_all_frames(1920, 1080)
-            with open(f"/work/cvcs_2023_group17/mot_preprocess/labels/train/{video_idx:03d}/{idx:04d}.txt", "w") as f:
+            with open(f"/work/cvcs_2023_group17/mot_preprocess/labels/val/{video_idx:03d}/{idx:04d}.txt", "w") as f:
                 for bbox in frame:
                     f.write(f"0 {bbox.left} {bbox.top} {bbox.width} {bbox.height}\n")
 

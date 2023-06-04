@@ -154,7 +154,9 @@ class YOLOLayer(nn.Module):
             else:
                 x[..., 0:2] = (x[..., 0:2].sigmoid() + self.grid) * stride  # xy
                 x[..., 2:4] = torch.exp(x[..., 2:4]) * self.anchor_grid # wh
-                x[..., 4:] = x[..., 4:].sigmoid() # conf, cls
+                # MODIFICATO
+                x[..., 4:5] = x[..., 4:5].sigmoid() # conf, cls
+                x[..., 5:] = 1
             x = x.view(batch_size, -1, self.no)
         
         return x

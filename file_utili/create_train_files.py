@@ -2,7 +2,7 @@ import random
 import os
 import os.path
 
-output_file_path = "../config/train.txt"
+output_file_path = "../config/train_1.txt"
 
 f_out = open(output_file_path, "w")
 

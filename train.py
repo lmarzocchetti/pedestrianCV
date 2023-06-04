@@ -72,7 +72,7 @@ def main():
     parser = argparse.ArgumentParser(description="Trains the YOLO model.")
     parser.add_argument("-m", "--model", type=str, default="config/yolov3.cfg", help="Path to model definition file (.cfg)")
     parser.add_argument("-d", "--data", type=str, default="config/mot.data", help="Path to data config file (.data)")
-    parser.add_argument("-e", "--epochs", type=int, default=500, help="Number of epochs")
+    parser.add_argument("-e", "--epochs", type=int, default=300, help="Number of epochs")
     parser.add_argument("-v", "--verbose", action='store_true', help="Makes the training more verbose")
     parser.add_argument("--n_cpu", type=int, default=2, help="Number of cpu threads to use during batch generation")
     parser.add_argument("--pretrained-weights", type=str, help="Path to checkpoint file (.weights or .pth). Starts training from checkpoint model")
@@ -80,7 +80,7 @@ def main():
     parser.add_argument("--evaluation_interval", type=int, default=1, help="Interval of epochs between evaluations on validation set")
     parser.add_argument("--multiscale_training", action="store_true", help="Allow multi-scale training")
     parser.add_argument("--iou_thres", type=float, default=0.5, help="Evaluation: IOU threshold required to qualify as detected")
-    parser.add_argument("--conf_thres", type=float, default=0.1, help="Evaluation: Object confidence threshold")
+    parser.add_argument("--conf_thres", type=float, default=0.4, help="Evaluation: Object confidence threshold")
     parser.add_argument("--nms_thres", type=float, default=0.5, help="Evaluation: IOU threshold for non-maximum suppression")
     parser.add_argument("--seed", type=int, default=-1, help="Makes results reproducable. Set -1 to disable.")
     args = parser.parse_args()
@@ -88,7 +88,7 @@ def main():
     os.makedirs("output", exist_ok=True)
     os.makedirs("checkpoints", exist_ok=True)
 
-    train_path = 'config/train.txt'
+    train_path = 'config/train_1.txt'
 
     device = torch.device("cuda")
 
@@ -176,7 +176,7 @@ def main():
 
         # Save model to checkpoint file
         if epoch % args.checkpoint_interval == 0:
-            checkpoint_path = f"checkpoints/yolov3_ckpt_{epoch}.pth"
+            checkpoint_path = f"checkpoints/yolov3_ckpt_part4_{epoch}.pth"
             print(f"---- Saving checkpoint to: '{checkpoint_path}' ----")
             torch.save(model.state_dict(), checkpoint_path)
 

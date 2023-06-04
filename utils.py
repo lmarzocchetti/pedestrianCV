@@ -9,6 +9,7 @@ import torchvision
 import numpy as np
 import subprocess
 import random
+from matplotlib import pyplot as plt
 
 def to_cpu(tensor):
     return tensor.detach().cpu()
@@ -92,7 +93,7 @@ def compute_ap(recall, precision):
 
     # and sum (\Delta recall) * prec
     ap = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
-    return 
+    return ap
 
 def ap_per_class(tp, conf, pred_cls, target_cls):
     """ Compute the average precision, given the recall and precision curves.
@@ -142,9 +143,16 @@ def ap_per_class(tp, conf, pred_cls, target_cls):
             # AP from recall-precision curve
             ap.append(compute_ap(recall_curve, precision_curve))
 
+            plt.plot(recall_curve, precision_curve, color='purple')
+            plt.title("Precision-Recall Curve")
+            plt.ylabel("Precision")
+            plt.xlabel("Recall")
+            plt.savefig("precision_recall.jpg")
+
     # Compute F1 score (harmonic mean of precision and recall)
     p, r, ap = np.array(p), np.array(r), np.array(ap)
     f1 = 2 * p * r / (p + r + 1e-16)
+
 
     return p, r, ap, f1, unique_classes.astype("int32")
 
