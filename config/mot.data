@@ -1,5 +1,0 @@
-classes=1
-train=config/train_1.txt
-valid=config/val.txt
-names=config/mot.names
-backup=backup/
