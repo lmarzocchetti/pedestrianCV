@@ -16,6 +16,11 @@ conda install -c conda-forge gst-plugins-base
 conda install -c nvidia libnpp
 ```
 
+To download the weights of the resnet101 for the Human Action Recognition part download these weights and copy them on the folder 'two_stream'
+```
+https://drive.google.com/drive/folders/15gbc3ySWVHaghNPTtDGrnthXZeW6Av8p?usp=sharing
+```
+
 ### Usage tracking and har
 For the part of tracking and human action recognition:
 ```
