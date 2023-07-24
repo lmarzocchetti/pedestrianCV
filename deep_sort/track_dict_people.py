@@ -203,7 +203,7 @@ def video_inference(model_path, weights_path, videos_path, classes, frames_path,
     
     # Iterate through all videos
     while folders_processed < len(folders_names):
-        video_id = folders_names[folders_processed].split("/")[1]
+        video_id = folders_names[folders_processed].split("/")[2]
         out_id_path = f'{output_videos_path}/{video_id}.mp4'
         #makedirs(out_id_path, exist_ok=True)
         video_dict = detect_directory(
