@@ -40,4 +40,7 @@ And the launch:
 ```
 python inpaint.py 
 ```
-Use the option ```--help``` to see the parameters that accept this script
+Use the option ```--help``` to see the parameters that accept this script or try:
+```
+python inpaint.py -m dynamic -i [input_file] -r [start_x,start_y,width,height] -d cuda --increment-x 10 -o [output_file.avi]
+```
