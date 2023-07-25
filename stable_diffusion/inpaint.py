@@ -13,7 +13,7 @@ def parse_rectangle_attr(to_parse: str) -> tuple[tuple[int, int], tuple[int, int
     
     return ((int(splitted[0]), int(splitted[1])), (int(splitted[2]), int(splitted[3])))
 
-def reconstruct_video(output_filename: str, fps: int, scr_dim: tuple[int, int], input_frames_no) -> None:
+def reconstruct_video(output_filename: str, fps: int, scr_dim: tuple[int, int], input_frames_no = None) -> None:
     out = cv2.VideoWriter(output_filename, cv2.VideoWriter_fourcc(*'XVID'), fps, scr_dim)
 
     l = []
@@ -28,8 +28,9 @@ def reconstruct_video(output_filename: str, fps: int, scr_dim: tuple[int, int], 
     for (_, i) in l:
         out.write(i)
 
-    for frame in input_frames_no:
-        out.write(frame)
+    if input_frames_no != None:
+        for frame in input_frames_no:
+            out.write(frame)
 
     out.release()
 
@@ -109,11 +110,16 @@ def main():
     if args.mode == 'dynamic':
         keypoints = utils.load_keypoints()
     
-    # control how much frames to mask
+    # # control how much frames to mask
+    # if args.mode == 'static':
+    #     mask_frames = [mask_frames for _ in range(n_frames)]
+    
+    input_frames = []
+
     if args.mode == 'static':
-        mask_frames = [mask_frames for _ in range(n_frames)]
+        for i in range(n_frames):
+            input_frames.append(Image.open(f"frames/frame_{i}.jpg"))
     else:
-        input_frames = []
         for i in range(len(mask_frames)):
             input_frames.append(Image.open(f"frames/frame_{i}.jpg"))
         # input_frames = input_frames_all[:len(mask_frames)]
@@ -199,9 +205,11 @@ def main():
     del keypoints
     gc.collect()
     
-    input_frames_no = [Image.open(f"frames/frame_{i}.jpg") for i in range(n_frames, n_framex)]
-    
-    reconstruct_video(args.output, fps, scr_dim, input_frames_no)
+    if args.mode == 'dynamic':
+        input_frames_no = [Image.open(f"frames/frame_{i}.jpg") for i in range(n_frames, n_framex)]
+        reconstruct_video(args.output, fps, scr_dim, input_frames_no)
+    else:
+        reconstruct_video(args.output, fps, scr_dim)
 
 if __name__ == '__main__':
     main()
