@@ -14,6 +14,7 @@ There are some system packages to install too:
 ```
 conda install -c conda-forge gst-plugins-base
 conda install -c nvidia libnpp
+conda install -c conda-forge ilmbase
 ```
 
 To download the weights of the resnet101 for the Human Action Recognition part download these weights and copy them on the folder 'two_stream'
